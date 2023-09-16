@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,102 +32,253 @@ import androidx.navigation.NavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Register(){
-
-    var name:String by remember{
+fun Register() {
+    var name: String by remember {
         mutableStateOf("")
     }
-    var username:String by remember{
+    var username: String by remember {
         mutableStateOf("")
     }
-
-    var email:String by remember{
+    var email: String by remember {
         mutableStateOf("")
     }
-
-    var bio:String by remember{
+    var bio: String by remember {
         mutableStateOf("")
     }
-    var password:String by remember{
+    var password: String by remember {
         mutableStateOf("")
     }
 
-    Column(modifier= Modifier
-        .fillMaxSize()
-        .padding(10.dp),
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-
-        Text(text = "Register here", style = TextStyle(
-            fontWeight = FontWeight.ExtraBold
-            , fontSize = 25.sp
-        )
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text ("Name") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ), singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text ("Username") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ), singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text ("Email") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ), singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text ("Password") },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ), singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        ElevatedButton(onClick = { /*TODO*/ },
-            modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Register here", style = TextStyle(
-                fontWeight = FontWeight.ExtraBold
-                , fontSize = 25.sp),
-//                color = Color.Black
+    ) {
+        item {
+            Text(
+                text = "Register here",
+                style = TextStyle(
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 25.sp
+                )
             )
         }
-
-
-        Spacer(modifier = Modifier.height(2.dp))
-        TextButton(onClick = { /*TODO*/ },
-            modifier = Modifier.fillMaxWidth()) {
-            Text(text = "alredy registers ? login here ", style = TextStyle(
-                fontWeight = FontWeight.Medium
-                , fontSize = 25.sp),
-//                color = Color.Black
+        item {
+            Spacer(modifier = Modifier.height(30.dp))
+        }
+        item {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Name") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
             )
+        }
+        item {
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Username") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+        item {
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+        item {
+            ElevatedButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Register here",
+                    style = TextStyle(
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 25.sp
+                    ),
+                    // color = Color.Black
+                )
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(2.dp))
+        }
+        item {
+            TextButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Already registered? Login here",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 25.sp
+                    ),
+                    // color = Color.Black
+                )
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
-fun reg_prev(){
-    Register()
+fun reg_prev() {
+
+        Register()
+
 }
+
+
+
+
+
+
+
+
+
+
+
+//code with out of the screen problem
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Register(){
+//
+//    var name:String by remember{
+//        mutableStateOf("")
+//    }
+//    var username:String by remember{
+//        mutableStateOf("")
+//    }
+//
+//    var email:String by remember{
+//        mutableStateOf("")
+//    }
+//
+//    var bio:String by remember{
+//        mutableStateOf("")
+//    }
+//    var password:String by remember{
+//        mutableStateOf("")
+//    }
+//
+//    Column(modifier= Modifier
+//        .fillMaxSize()
+//        .padding(10.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ){
+//
+//        Text(text = "Register here", style = TextStyle(
+//            fontWeight = FontWeight.ExtraBold
+//            , fontSize = 25.sp
+//        )
+//        )
+//        Spacer(modifier = Modifier.height(30.dp))
+//        OutlinedTextField(
+//            value = name,
+//            onValueChange = { name = it },
+//            label = { Text ("Name") },
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Email
+//            ), singleLine = true,
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        OutlinedTextField(
+//            value = username,
+//            onValueChange = { username = it },
+//            label = { Text ("Username") },
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Email
+//            ), singleLine = true,
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        OutlinedTextField(
+//            value = email,
+//            onValueChange = { email = it },
+//            label = { Text ("Email") },
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Email
+//            ), singleLine = true,
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(5.dp))
+//        OutlinedTextField(
+//            value = password,
+//            onValueChange = { password = it },
+//            label = { Text ("Password") },
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Password
+//            ), singleLine = true,
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        Spacer(modifier = Modifier.height(5.dp))
+//        ElevatedButton(onClick = { /*TODO*/ },
+//            modifier = Modifier.fillMaxWidth()) {
+//            Text(text = "Register here", style = TextStyle(
+//                fontWeight = FontWeight.ExtraBold
+//                , fontSize = 25.sp),
+////                color = Color.Black
+//            )
+//        }
+//
+//
+//        Spacer(modifier = Modifier.height(2.dp))
+//        TextButton(onClick = { /*TODO*/ },
+//            modifier = Modifier.fillMaxWidth()) {
+//            Text(text = "alredy registers ? login here ", style = TextStyle(
+//                fontWeight = FontWeight.Medium
+//                , fontSize = 25.sp),
+////                color = Color.Black
+//            )
+//        }
+//    }
+//}
+//
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun reg_prev(){
+//    Register()
+//}
+
+
+//above code was creating pron in horizontal mode content was going out of the screen
