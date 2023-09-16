@@ -68,6 +68,11 @@ fun MyBottomBar(navController1: NavHostController) {
             Icons.Rounded.Notifications
         ),
         BottomNavItem(
+            title="Add Threads",
+            Routes.AddThreads.routes,
+            Icons.Rounded.Add
+        ),
+        BottomNavItem(
             title="Search",
             Routes.Search.routes,
             Icons.Rounded.Search
@@ -77,11 +82,7 @@ fun MyBottomBar(navController1: NavHostController) {
             Routes.Profile.routes,
             Icons.Rounded.Person
         ),
-        BottomNavItem(
-            title="Add Threads",
-            Routes.AddThreads.routes,
-            Icons.Rounded.Add
-        ),
+
 
     )
     BottomAppBar{
