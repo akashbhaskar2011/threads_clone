@@ -32,11 +32,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.threads_clone.navigations.Routes
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(){
+fun Login(navController: NavHostController){
     var email:String by remember{
     mutableStateOf("")
     }
@@ -86,7 +89,13 @@ fun Login(){
 
 
         Spacer(modifier = Modifier.height(2.dp))
-        TextButton(onClick = { /*TODO*/ },
+        TextButton(onClick = {
+            navController.navigate(Routes.Register.routes){
+                popUpTo(navController.graph.startDestinationId)
+                launchSingleTop=true
+            }
+        }
+        ,
             modifier = Modifier.fillMaxWidth()) {
             Text(text = "new user ? create account", style = TextStyle(
                 fontWeight = FontWeight.Medium
@@ -98,8 +107,8 @@ fun Login(){
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun login_prev(){
-    Login()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun login_prev(){
+//    Login()
+//}
