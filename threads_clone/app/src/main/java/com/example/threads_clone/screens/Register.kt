@@ -1,14 +1,24 @@
 package com.example.threads_clone.screens
 
-import android.widget.ScrollView
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,17 +32,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import com.example.threads_clone.R
+import com.example.threads_clone.navigations.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Register() {
+fun Register(navController: NavHostController) {
     var name: String by remember {
         mutableStateOf("")
     }
@@ -48,6 +65,35 @@ fun Register() {
     var password: String by remember {
         mutableStateOf("")
     }
+    var imageUri:Uri? by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+//    this is to check if the condition is got from the user or not
+    val permissionToRequest: String = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+
+    val context= LocalContext.current
+
+    val launcher= rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()){
+        uri: Uri? ->
+        imageUri=uri
+    }
+    val permisLauncher:ManagedActivityResultLauncher<String,Boolean>
+    = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()){
+        isGranted:Boolean ->
+        if (isGranted){
+
+        }else{
+
+        }
+    }
+
+
 
     LazyColumn(
         modifier = Modifier
@@ -66,7 +112,35 @@ fun Register() {
             )
         }
         item {
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+        item {
+            Image(
+                painter = if (imageUri==null)
+                    painterResource(id = R.drawable.man)
+                else
+                    rememberAsyncImagePainter(model = imageUri),
+                contentDescription = "image placehodeer icon",
+                modifier = Modifier
+                    .size(95.dp)
+                    .clip(CircleShape)
+                    .background(color = Color.DarkGray)
+                    .clickable {
+                        val isGranted = ContextCompat.checkSelfPermission(
+                            context, permissionToRequest
+                        ) == PackageManager.PERMISSION_GRANTED
+
+                        if (isGranted) {
+                            launcher.launch("image/*")
+                        } else {
+                            permisLauncher.launch(permissionToRequest)
+                        }
+                    })
+
+
+        }
+        item {
+            Spacer(modifier = Modifier.height(5.dp))
         }
         item {
             OutlinedTextField(
@@ -124,7 +198,13 @@ fun Register() {
         }
         item {
             ElevatedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+
+
+
+
+
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -142,7 +222,13 @@ fun Register() {
         }
         item {
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                          navController.navigate(Routes.Login.routes){
+                              popUpTo(navController.graph.startDestinationId)
+                              launchSingleTop=true
+                          }
+
+                          },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -158,13 +244,30 @@ fun Register() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun reg_prev() {
+//@Preview(showBackground = true)
+//@Composable
+//fun reg_prev() {
+//
+//        Register()
+//
+//}
 
-        Register()
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
