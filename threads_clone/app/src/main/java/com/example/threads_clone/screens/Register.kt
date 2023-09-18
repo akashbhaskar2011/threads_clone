@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,7 +27,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,10 +45,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.threads_clone.R
 import com.example.threads_clone.navigations.Routes
+import com.example.threads_clone.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,6 +74,10 @@ fun Register(navController: NavHostController) {
         mutableStateOf<Uri?>(null)
     }
 
+
+    val authViewModel:AuthViewModel= viewModel()
+    val firebaseUser by authViewModel.firebaseUser.observeAsState(null)
+
 //    this is to check if the condition is got from the user or not
     val permissionToRequest: String = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
         Manifest.permission.READ_MEDIA_IMAGES
@@ -89,11 +98,22 @@ fun Register(navController: NavHostController) {
         if (isGranted){
 
         }else{
-
+//            authViewModel.register(email, password, name, bio, username,imageUri!!,context)
         }
     }
 
 
+
+
+
+    LaunchedEffect(firebaseUser ){
+        if (firebaseUser!=null){
+            navController.navigate(Routes.BottomNav.routes){
+                popUpTo(navController.graph.startDestinationId)
+                launchSingleTop=true
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -148,7 +168,7 @@ fun Register(navController: NavHostController) {
                 onValueChange = { name = it },
                 label = { Text("Name") },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Text
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -160,7 +180,20 @@ fun Register(navController: NavHostController) {
                 onValueChange = { username = it },
                 label = { Text("Username") },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        item {
+            OutlinedTextField(
+                value = bio,
+                onValueChange = { bio = it },
+                label = { Text("bio") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -200,7 +233,13 @@ fun Register(navController: NavHostController) {
             ElevatedButton(
                 onClick = {
 
+                    if(name.isEmpty()||email.isEmpty()||username.isEmpty()||imageUri==null||bio.isEmpty()){
+                        Toast.makeText(context,"please fill all details",Toast.LENGTH_SHORT).show()
+                    }else{
+                            authViewModel.register(email,password,name,bio,username,imageUri,context)
+                        //navController.navigate(Routes.BottomNav.routes)
 
+                    }
 
 
 
