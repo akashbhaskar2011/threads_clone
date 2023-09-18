@@ -9,7 +9,10 @@ import com.example.threads_clone.Model.UserModel
 import com.example.threads_clone.utils.SharedPref
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.util.UUID
@@ -35,16 +38,33 @@ class AuthViewModel: ViewModel() {
         _firebaseUser.value=auth.currentUser
     }
 
-    fun login(email:String,password:String){
+    fun login(email:String,password:String,context: Context){
+
 
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener {
             if (it.isSuccessful){
                 _firebaseUser.postValue(auth.currentUser)
+                getData(auth.currentUser!!.uid, context  )
+
             }else{
-                _error.postValue("Something went wrong")
+                _error.postValue(it.exception!!.message)
             }
         }
+    }
+
+    private fun getData(uid: String,context: Context) {
+            userRef.child(uid).addListenerForSingleValueEvent(object :ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userData=snapshot.getValue(UserModel::class.java)
+                    SharedPref.storeData(userData!!.email,userData.name,userData.bio,userData.username,userData.imageUrl,context )
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
     }
 
 
@@ -105,6 +125,11 @@ class AuthViewModel: ViewModel() {
             .addOnFailureListener{
 
             }
+    }
+
+     fun logOut(){
+        auth.signOut()
+        _firebaseUser.postValue(null)
     }
 
 }

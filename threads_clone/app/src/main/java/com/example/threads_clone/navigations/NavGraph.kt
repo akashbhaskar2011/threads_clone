@@ -1,8 +1,6 @@
 package com.example.threads_clone.navigations
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +31,7 @@ fun NavGraph(navController: NavHostController){
             Notification()
         }
         composable(route = Routes.Profile.routes){
-            Profile()
+            Profile(navController)
         }
         composable(route = Routes.Search.routes){
             Search()
