@@ -57,7 +57,13 @@ class AuthViewModel: ViewModel() {
             userRef.child(uid).addListenerForSingleValueEvent(object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userData=snapshot.getValue(UserModel::class.java)
-                    SharedPref.storeData(userData!!.email,userData.name,userData.bio,userData.username,userData.imageUrl,context )
+                    SharedPref.storeData(
+                        userData!!.email,
+                        userData.name,
+                        userData.bio,
+                        userData.username,
+                        userData.imageUrl,
+                        context )
                 }
 
                 override fun onCancelled(error: DatabaseError) {

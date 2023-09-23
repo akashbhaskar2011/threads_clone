@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -108,15 +109,27 @@ fun Login(navController: NavHostController ){
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(5.dp))
+
+
+
+
+
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text ("enter ur Passord") },
+            visualTransformation= PasswordVisualTransformation(),
+
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ), singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
+
+
+
+
+
         Spacer(modifier = Modifier.height(5.dp))
         ElevatedButton(onClick = {
 
