@@ -210,7 +210,9 @@ navHostController.navigate(Routes.Home.routes){
                 , fontSize = 20.sp,),modifier=Modifier.padding(top=5.dp)
             )
             TextButton(onClick = {
-    if (imageUri==null) {
+                if(imageUri==null && thread=="")
+                    Toast.makeText(context,"Add something to post",Toast.LENGTH_SHORT).show()
+    else if (imageUri==null) {
         threadViewModel.saveData(thread,FirebaseAuth.getInstance().currentUser!!.uid,"")
     }else{
     threadViewModel.saveImage(thread,FirebaseAuth.getInstance().currentUser!!.uid, imageUri!!)
