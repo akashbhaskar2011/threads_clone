@@ -22,7 +22,7 @@ fun NavGraph(navController: NavHostController){
         }
 
         composable(route = Routes.AddThreads.routes){
-            AddThreads()
+            AddThreads(navController)
         }
         composable(route = Routes.Home.routes){
             Home()

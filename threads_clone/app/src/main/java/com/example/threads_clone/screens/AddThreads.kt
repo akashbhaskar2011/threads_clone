@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,7 +28,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,16 +43,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.threads_clone.R
+import com.example.threads_clone.navigations.Routes
 import com.example.threads_clone.utils.SharedPref
+import com.example.threads_clone.viewmodel.AddThreadViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun AddThreads(){
+fun AddThreads(navHostController: NavHostController){
+
+    val threadViewModel:AddThreadViewModel= viewModel()
+    val isPosted by threadViewModel.isposted.observeAsState(false)
     val context= LocalContext.current
 
     var thread:String by remember {
@@ -84,6 +94,26 @@ fun AddThreads(){
 
 
 
+
+
+    LaunchedEffect(isPosted ){
+        if(isPosted!!){
+            thread=""
+            imageUri=null
+            Toast.makeText(context,"thread added",Toast.LENGTH_SHORT).show()
+
+navHostController.navigate(Routes.Home.routes){
+    popUpTo(Routes.AddThreads.routes){
+        inclusive=true
+    }
+
+}
+
+
+        }
+    }
+
+
     Column(modifier= Modifier
         .fillMaxSize()
             ) {
@@ -96,7 +126,11 @@ fun AddThreads(){
                     modifier= Modifier
                         .padding(10.dp)
                         .clickable {
-
+                            navHostController.navigate(Routes.Home.routes) {
+                                popUpTo(Routes.AddThreads.routes) {
+                                    inclusive = true
+                                }
+                            }
                         })
             }
 
@@ -175,7 +209,14 @@ fun AddThreads(){
                 fontWeight = FontWeight.Bold
                 , fontSize = 20.sp,),modifier=Modifier.padding(top=5.dp)
             )
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = {
+    if (imageUri==null) {
+        threadViewModel.saveData(thread,FirebaseAuth.getInstance().currentUser!!.uid,"")
+    }else{
+    threadViewModel.saveImage(thread,FirebaseAuth.getInstance().currentUser!!.uid, imageUri!!)
+}
+
+            }) {
                 Text(text = "Post",fontSize = 20.sp, modifier = Modifier.padding(bottom = 5.dp))
 
             }
@@ -203,8 +244,4 @@ fun BasicTextFieldWithHint(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AddPostPrev(){
-    AddThreads()
-}
+//
