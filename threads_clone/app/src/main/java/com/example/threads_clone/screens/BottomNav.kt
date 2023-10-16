@@ -30,6 +30,9 @@ fun BottomNav(navController:NavHostController){
     Scaffold(bottomBar = {MyBottomBar(navController1)}) {innerPadding->
         NavHost(navController=navController1, startDestination = Routes.Home.routes,
             modifier = Modifier.padding(innerPadding)){
+            composable(route = Routes.Search.routes){
+                Search(navController)
+            }
             composable(route = Routes.AddThreads.routes){
                 AddThreads(navController1)
             }
@@ -42,9 +45,7 @@ fun BottomNav(navController:NavHostController){
             composable(route = Routes.Profile.routes){
                 Profile(navController)
             }
-            composable(route = Routes.Search.routes){
-                Search()
-            }
+
 
         }
     }
@@ -62,9 +63,9 @@ fun MyBottomBar(navController1: NavHostController) {
             Icons.Rounded.Home
         ),
         BottomNavItem(
-            title="Notification",
-            Routes.Notification.routes,
-            Icons.Rounded.Notifications
+            title="Search",
+            Routes.Search.routes,
+            Icons.Rounded.Search
         ),
         BottomNavItem(
             title="Add Threads",
@@ -72,10 +73,11 @@ fun MyBottomBar(navController1: NavHostController) {
             Icons.Rounded.Add
         ),
         BottomNavItem(
-            title="Search",
-            Routes.Search.routes,
-            Icons.Rounded.Search
+            title="Notification",
+            Routes.Notification.routes,
+            Icons.Rounded.Notifications
         ),
+
         BottomNavItem(
             title="Profile",
             Routes.Profile.routes,
